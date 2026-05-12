@@ -3,84 +3,390 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>&#127795; Wandelroute langs vijgenbomen in Amsterdam</title>
+<title>Wandelroute langs vijgenbomen in Amsterdam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --bg: #fafbf7;
+    --bg-card: #ffffff;
+    --bg-warm: #f6f3ee;
+    --ink: #1e2a1e;
+    --ink-light: #4a5a48;
+    --ink-faded: #8a9488;
+    --fire: #c0392b;
+    --fire-glow: #e74c3c;
+    --fire-pale: #fdf0ee;
+    --green: #2d6a3f;
+    --green-pale: #eef5f0;
+    --gold: #b8860b;
+    --gold-pale: #faf5e8;
+    --cafe: #7b5ea7;
+    --cafe-pale: #f4f0fa;
+    --rule: #e2e6de;
+    --ff-display: 'Cormorant Garamond', 'Garamond', 'Georgia', serif;
+    --ff-body: 'Libre Baskerville', 'Georgia', serif;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #faf9f6; color: #1a1a1a; max-width: 480px; margin: 0 auto; padding: 16px; }
 
-  .header { text-align: center; padding: 24px 0 16px; }
-  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
-  .header .subtitle { font-size: 14px; color: #888; }
+  body {
+    font-family: var(--ff-body);
+    background: var(--bg);
+    color: var(--ink);
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 0 20px 48px;
+    font-size: 13px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
 
-  .route-toggle { display: flex; gap: 8px; margin-bottom: 20px; }
-  .route-toggle button { flex: 1; padding: 10px 8px; border-radius: 10px; border: 1.5px solid #e0e0e0; background: #fff; font-size: 13px; cursor: pointer; transition: all 0.2s; }
-  .route-toggle button.active { background: #f0f7ee; border-color: #6b9e5a; font-weight: 600; color: #2d5a1e; }
+  /* ---- HEADER ---- */
+  .header {
+    text-align: center;
+    padding: 48px 0 12px;
+    animation: fadeDown 0.8s ease-out;
+  }
 
-  .stats { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; }
-  .stat { background: #fff; border: 1px solid #eee; border-radius: 10px; padding: 10px 16px; text-align: center; }
-  .stat .value { font-size: 18px; font-weight: 700; color: #d97706; }
-  .stat .label { font-size: 11px; color: #999; margin-top: 2px; }
+  .header .tree { font-size: 40px; margin-bottom: 12px; display: block; }
 
-  .stop { position: relative; padding-left: 44px; margin-bottom: 24px; }
-  .stop::before { content: ''; position: absolute; left: 17px; top: 36px; bottom: -24px; width: 2px; background: #e5e5e5; }
+  .header h1 {
+    font-family: var(--ff-display);
+    font-size: 27px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .header .subtitle {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--fire);
+    margin-top: 6px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+
+  .header .ornament {
+    margin: 22px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .header .ornament span {
+    width: 44px;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .header .ornament .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--fire);
+    opacity: 0.5;
+  }
+
+  /* ---- INTRO ---- */
+  .intro {
+    margin: 28px 0 24px;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    animation: fadeUp 0.6s ease-out 0.2s both;
+  }
+
+  .intro h2 {
+    font-family: var(--ff-display);
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--green);
+    letter-spacing: 0.3px;
+  }
+
+  .intro p {
+    color: var(--ink-light);
+    font-size: 12.5px;
+    line-height: 1.75;
+  }
+
+  .intro p + p { margin-top: 10px; }
+  .intro em { color: var(--ink); }
+
+  .intro .source {
+    display: block;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+    font-size: 10px;
+    color: var(--ink-faded);
+    font-style: italic;
+    letter-spacing: 0.3px;
+  }
+
+  /* ---- TOGGLE ---- */
+  .route-toggle {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease-out 0.35s both;
+  }
+
+  .route-toggle button {
+    flex: 1;
+    padding: 12px 8px;
+    border: 1px solid var(--rule);
+    background: var(--bg-card);
+    font-family: var(--ff-display);
+    font-size: 14px;
+    color: var(--ink-faded);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+    font-weight: 400;
+  }
+
+  .route-toggle button + button { border-left: none; }
+
+  .route-toggle button.active {
+    background: var(--fire);
+    border-color: var(--fire);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .route-toggle button:not(.active):hover {
+    background: var(--bg-warm);
+    color: var(--ink-light);
+  }
+
+  /* ---- STATS ---- */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+    animation: fadeUp 0.6s ease-out 0.45s both;
+  }
+
+  .stat { text-align: center; }
+
+  .stat .value {
+    font-family: var(--ff-display);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .stat .label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--ink-faded);
+    margin-top: 5px;
+  }
+
+  /* ---- STOPS ---- */
+  .stop {
+    position: relative;
+    padding-left: 50px;
+    padding-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease-out both;
+  }
+
+  .stop:nth-child(1) { animation-delay: 0.5s; }
+  .stop:nth-child(2) { animation-delay: 0.6s; }
+  .stop:nth-child(3) { animation-delay: 0.7s; }
+  .stop:nth-child(4) { animation-delay: 0.8s; }
+  .stop:nth-child(5) { animation-delay: 0.9s; }
+  .stop:nth-child(6) { animation-delay: 1.0s; }
+  .stop:nth-child(7) { animation-delay: 1.1s; }
+  .stop:nth-child(8) { animation-delay: 1.2s; }
+
+  .stop::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 34px;
+    bottom: 0;
+    width: 1px;
+    border-left: 1px dashed var(--rule);
+  }
+
   .stop:last-child::before { display: none; }
 
-  .stop-marker { position: absolute; left: 4px; top: 2px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
-  .stop-marker.start { background: #16a34a; }
-  .stop-marker.fig { background: #d97706; }
-  .stop-marker.cafe { background: #7c3aed; font-size: 14px; }
-  .stop-marker.end { background: #dc2626; font-size: 14px; }
+  /* ---- MARKERS ---- */
+  .stop-marker {
+    position: absolute;
+    left: 2px;
+    top: 3px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ff-display);
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+  }
 
-  .stop-content { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px 16px; }
-  .stop-name { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
-  .stop-address { font-size: 12px; color: #999; margin-bottom: 6px; }
-  .stop-desc { font-size: 13px; color: #555; line-height: 1.5; }
+  .stop-marker.start { background: var(--green); }
+  .stop-marker.fig { background: var(--fire); }
+  .stop-marker.cafe { background: var(--cafe); font-size: 12px; }
+  .stop-marker.end { background: var(--gold); font-size: 12px; }
 
-  .note { background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 12px 14px; margin-top: 8px; font-size: 12px; color: #92400e; line-height: 1.5; }
-  .note strong { color: #78350f; }
-  .note .note-label { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; color: #b45309; }
+  /* ---- CONTENT ---- */
+  .stop-name {
+    font-family: var(--ff-display);
+    font-weight: 500;
+    font-size: 19px;
+    margin-bottom: 2px;
+    color: var(--ink);
+  }
 
-  .maps-link { display: block; text-align: center; padding: 14px; background: #4285f4; color: white; border-radius: 12px; font-weight: 600; text-decoration: none; font-size: 15px; margin: 24px 0 8px; }
-  .maps-link:hover { background: #3367d6; }
-  .maps-link-alt { display: block; text-align: center; padding: 14px; background: #fff; color: #4285f4; border: 1.5px solid #4285f4; border-radius: 12px; font-weight: 600; text-decoration: none; font-size: 15px; margin-bottom: 24px; }
+  .stop-address {
+    font-size: 10px;
+    color: var(--ink-faded);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
 
-  .footer { text-align: center; padding: 16px 0; font-size: 11px; color: #ccc; }
+  .stop-desc {
+    font-size: 12.5px;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
 
-  .intro { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 16px; margin-bottom: 20px; font-size: 13px; color: #555; line-height: 1.6; }
-  .intro h2 { font-size: 15px; color: var(--text-primary, #1a1a1a); margin-bottom: 8px; }
-  .intro .source { font-size: 11px; color: #bbb; margin-top: 8px; font-style: italic; }
+  /* ---- NOTES ---- */
+  .note {
+    margin-top: 12px;
+    padding: 13px 15px;
+    background: var(--fire-pale);
+    border-left: 2px solid var(--fire);
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+
+  .note strong { color: var(--ink); font-weight: 700; }
+
+  .note .note-label {
+    display: block;
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--fire);
+    margin-bottom: 5px;
+  }
+
+  .note.gold {
+    background: var(--gold-pale);
+    border-left-color: var(--gold);
+  }
+  .note.gold .note-label { color: var(--gold); }
+
+  .note.cafe-note {
+    background: var(--cafe-pale);
+    border-left-color: var(--cafe);
+  }
+  .note.cafe-note .note-label { color: var(--cafe); }
+
+  /* ---- MAPS ---- */
+  .maps-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    background: var(--fire);
+    color: #fff;
+    border: none;
+    font-family: var(--ff-display);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 28px 0 8px;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+  .maps-link:hover { background: var(--fire-glow); }
+
+  .maps-link svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+    opacity: 0.8;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 24px 0 8px;
+    font-size: 10px;
+    color: var(--ink-faded);
+    border-top: 1px solid var(--rule);
+    margin-top: 12px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
 
   .hidden { display: none; }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>&#127795; Wandelroute langs vijgenbomen in Amsterdam</h1>
+  <span class="tree">&#127795;</span>
+  <h1>Wandelroute langs<br>vijgenbomen in Amsterdam</h1>
   <div class="subtitle">voor Julia en Jonas</div>
+  <div class="ornament"><span></span><div class="dot"></div><span></span></div>
 </div>
 
 <div class="intro">
   <h2>Waarom vijgenbomen in Amsterdam?</h2>
-  Amsterdam telt zo'n 150 zelfgezaaide vijgenbomen - subtropische bomen die hier helemaal niet thuishoren, maar toch floreren dankzij het warmere stadsklimaat. Ze kiemen spontaan uit weggeworpen consumptievijgen, op stenige, beschutte plekken: in muurspleten, keldergaten en langs gevels. Stadsecoloog Ton Denters ontdekte de eerste wilde stadsvijg in 1990 en volgt ze sindsdien.
-  <br><br>
-  Bijzonder: de vijgen die je aan deze bomen ziet worden nooit echt rijp. De gespecialiseerde vijgenwespen die de bloemen bestuiven bestaan niet in Nederland. De bloemen zitten verstopt <em>binnenin</em> de vrucht - onzichtbaar voor het oog.
-  <br><br>
-  De vijg is een van de oudste cultuurgewassen ter wereld, samen met de druif en olijf. Het is de eerste plant die in de Bijbel wordt genoemd (Genesis 3:7), en in 7.000 jaar oude opgravingen in Jericho zijn vijgenzaden gevonden.
-  <div class="source">Bron: Ton Denters, &laquo;Ode aan de Vijgenboom&raquo;, Stadsplanten.nl</div>
+  <p>Amsterdam telt zo'n 150 zelfgezaaide vijgenbomen - subtropische bomen die hier helemaal niet thuishoren, maar toch floreren dankzij het warmere stadsklimaat. Ze kiemen spontaan uit weggeworpen consumptievijgen, op stenige, beschutte plekken: in muurspleten, keldergaten en langs gevels. Stadsecoloog Ton Denters ontdekte de eerste wilde stadsvijg in 1990 en volgt ze sindsdien.</p>
+  <p>Bijzonder: de vijgen die je aan deze bomen ziet worden nooit echt rijp. De gespecialiseerde vijgenwespen die de bloemen bestuiven bestaan niet in Nederland. De bloemen zitten verstopt <em>binnenin</em> de vrucht - onzichtbaar voor het oog.</p>
+  <p>De vijg is een van de oudste cultuurgewassen ter wereld, samen met de druif en olijf. Het is de eerste plant die in de Bijbel wordt genoemd (Genesis 3:7), en in 7.000 jaar oude opgravingen in Jericho zijn vijgenzaden gevonden.</p>
+  <span class="source">Bron: Ton Denters, &laquo;Ode aan de Vijgenboom&raquo;, Stadsplanten.nl</span>
 </div>
 
 <div class="route-toggle">
-  <button id="btn-gollem" class="active" onclick="showRoute('gollem')">&#9728;&#65039; Gollem (terras)</button>
-  <button id="btn-bordello" onclick="showRoute('bordello')">&#127864; Bordello (Zeedijk)</button>
+  <button id="btn-gollem" class="active" onclick="showRoute('gollem')">&#9728;&#65039; Gollem aan het Water</button>
+  <button id="btn-bordello" onclick="showRoute('bordello')">&#127864; Bordello Aperitivo</button>
 </div>
 
-<!-- GOLLEM ROUTE -->
+<!-- ==================== GOLLEM ==================== -->
 <div id="route-gollem">
 
 <div class="stats">
-  <div class="stat"><div class="value">5 km</div><div class="label">afstand</div></div>
-  <div class="stat"><div class="value">~1u10</div><div class="label">wandeltijd</div></div>
+  <div class="stat"><div class="value">5,5</div><div class="label">kilometer</div></div>
+  <div class="stat"><div class="value">~1u17</div><div class="label">wandeltijd</div></div>
   <div class="stat"><div class="value">4</div><div class="label">vijgenbomen</div></div>
 </div>
 
@@ -126,20 +432,20 @@
       <strong>In de Hortus staat de oudste boom van Amsterdam:</strong> een Turkse hazelaar (Corylus colurna) uit 1795 - meer dan 230 jaar oud. Hij staat in de open tuin en is de oudste en dikste van zijn soort in heel Nederland.<br><br>
       Nog indrukwekkender: in het Palmhuis staat een Oost-Kaapse broodboom (Encephalartos altensteinii) van meer dan 300 jaar oud.
     </div>
-    <div class="note" style="background: #f0f7ff; border-color: #bfdbfe; color: #1e40af;">
-      <span class="note-label" style="color: #2563eb;">Bonus: dikste boom van Amsterdam</span>
+    <div class="note gold">
+      <span class="note-label">Bonus: dikste boom van Amsterdam</span>
       Die staat niet op de route, maar leuk om te vertellen: de twee dikste bomen van Amsterdam zijn platanen in het <strong>Leidsebosje</strong> bij het Leidseplein. Elk ruim 7 meter in omtrek, geplant in 1863. In 1925 moesten ze wijken voor een verkeersrotonde, maar Amsterdammers protesteerden en de bomen werden verplaatst in plaats van gekapt. Er zit een beeldje op van een houtzager die de tak doorzaagt waar hij op zit - <em>het Houtzagertje</em>.
     </div>
   </div>
 </div>
 
 <div class="stop">
-  <div class="stop-marker cafe">&#127866;</div>
+  <div class="stop-marker cafe">&#9749;</div>
   <div class="stop-content">
     <div class="stop-name">Caf&eacute; Eik en Linde</div>
     <div class="stop-address">Plantage Middenlaan 22A, 1018 DE Amsterdam</div>
     <div class="stop-desc">Oud bruin caf&eacute; recht naast de Hortus - de perfecte tussenstop voor een drankje.</div>
-    <div class="note">
+    <div class="note cafe-note">
       <span class="note-label">Waarom Eik en Linde?</span>
       De naam verwijst naar het verhaal van Philemon en Baucis uit Ovidius' <em>Metamorfosen</em>. Een oud echtpaar was het enige dat de verklede goden Zeus en Hermes gastvrij ontving. Als beloning mochten ze samen sterven - Philemon werd een eik, Baucis een linde. Twee bomen, voor altijd naast elkaar. Toepasselijk voor een wandeling langs bijzondere bomen.
     </div>
@@ -160,7 +466,7 @@
 </div>
 
 <div class="stop">
-  <div class="stop-marker end">&#9749;</div>
+  <div class="stop-marker end">&#127866;</div>
   <div class="stop-content">
     <div class="stop-name">Gollem aan het Water</div>
     <div class="stop-address">Entrepotdok 64, 1018 AX Amsterdam</div>
@@ -168,15 +474,18 @@
   </div>
 </div>
 
-<a class="maps-link" href="https://www.google.com/maps/dir/Oosterpark,+Amsterdam/Alexanderkade+13,+Amsterdam/Swammerdamstraat+26,+1091+RV+Amsterdam/Roetersstraat,+Amsterdam/Hortus+Botanicus+Amsterdam/Caf%C3%A9+Eik+en+Linde,+Plantage+Middenlaan+22A,+Amsterdam/Entrepotdok+145,+Amsterdam/Gollem+aan+het+Water,+Amsterdam/@52.365,4.91,14z/data=!3m1!4b1!4m2!4m1!3e2" target="_blank">Open route in Google Maps &#8599;</a>
+<a class="maps-link" href="https://www.google.com/maps/dir/Oosterpark,+Amsterdam/Alexanderkade+13,+Amsterdam/Swammerdamstraat+26,+1091+RV+Amsterdam/Roetersstraat,+Amsterdam/Hortus+Botanicus+Amsterdam/Caf%C3%A9+Eik+en+Linde,+Plantage+Middenlaan+22A,+Amsterdam/Entrepotdok+145,+Amsterdam/Gollem+aan+het+Water,+Amsterdam/@52.365,4.91,14z/data=!3m1!4b1!4m2!4m1!3e2" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+  Open in Google Maps
+</a>
 
 </div>
 
-<!-- BORDELLO ROUTE -->
+<!-- ==================== BORDELLO ==================== -->
 <div id="route-bordello" class="hidden">
 
 <div class="stats">
-  <div class="stat"><div class="value">6 km</div><div class="label">afstand</div></div>
+  <div class="stat"><div class="value">6</div><div class="label">kilometer</div></div>
   <div class="stat"><div class="value">~1u20</div><div class="label">wandeltijd</div></div>
   <div class="stat"><div class="value">5</div><div class="label">vijgenbomen</div></div>
 </div>
@@ -223,20 +532,20 @@
       <strong>In de Hortus staat de oudste boom van Amsterdam:</strong> een Turkse hazelaar (Corylus colurna) uit 1795 - meer dan 230 jaar oud. De oudste en dikste van zijn soort in heel Nederland.<br><br>
       In het Palmhuis: een Oost-Kaapse broodboom van meer dan 300 jaar oud.
     </div>
-    <div class="note" style="background: #f0f7ff; border-color: #bfdbfe; color: #1e40af;">
-      <span class="note-label" style="color: #2563eb;">Bonus: dikste boom van Amsterdam</span>
+    <div class="note gold">
+      <span class="note-label">Bonus: dikste boom van Amsterdam</span>
       Niet op de route, maar leuk om te vertellen: de twee dikste bomen staan in het <strong>Leidsebosje</strong> bij het Leidseplein. Elk ruim 7 meter in omtrek, geplant in 1863. Amsterdammers protesteerden in 1925 toen ze gekapt dreigden te worden voor een rotonde - ze werden verplaatst. Er zit een beeldje op: <em>het Houtzagertje</em>, een houtzager die de tak doorzaagt waar hij op zit.
     </div>
   </div>
 </div>
 
 <div class="stop">
-  <div class="stop-marker cafe">&#127866;</div>
+  <div class="stop-marker cafe">&#9749;</div>
   <div class="stop-content">
     <div class="stop-name">Caf&eacute; Eik en Linde</div>
     <div class="stop-address">Plantage Middenlaan 22A, 1018 DE Amsterdam</div>
     <div class="stop-desc">Oud bruin caf&eacute; recht naast de Hortus - de perfecte tussenstop voor een drankje.</div>
-    <div class="note">
+    <div class="note cafe-note">
       <span class="note-label">Waarom Eik en Linde?</span>
       De naam verwijst naar het verhaal van Philemon en Baucis uit Ovidius' <em>Metamorfosen</em>. Een oud echtpaar was het enige dat de verklede goden Zeus en Hermes gastvrij ontving. Als beloning mochten ze samen sterven - Philemon werd een eik, Baucis een linde. Twee bomen, voor altijd naast elkaar. Toepasselijk voor een wandeling langs bijzondere bomen.
     </div>
@@ -274,11 +583,14 @@
   </div>
 </div>
 
-<a class="maps-link" href="https://www.google.com/maps/dir/Oosterpark,+Amsterdam/Alexanderkade+13,+Amsterdam/Swammerdamstraat+26,+1091+RV+Amsterdam/Roetersstraat,+Amsterdam/Hortus+Botanicus+Amsterdam/Caf%C3%A9+Eik+en+Linde,+Plantage+Middenlaan+22A,+Amsterdam/Entrepotdok+145,+Amsterdam/Zwanenburgwal+8,+Amsterdam/Bordello+Aperitivo,+Zeedijk,+Amsterdam/@52.365,4.91,14z/data=!3m1!4b1!4m2!4m1!3e2" target="_blank">Open route in Google Maps &#8599;</a>
+<a class="maps-link" href="https://www.google.com/maps/dir/Oosterpark,+Amsterdam/Alexanderkade+13,+Amsterdam/Swammerdamstraat+26,+1091+RV+Amsterdam/Roetersstraat,+Amsterdam/Hortus+Botanicus+Amsterdam/Caf%C3%A9+Eik+en+Linde,+Plantage+Middenlaan+22A,+Amsterdam/Entrepotdok+145,+Amsterdam/Zwanenburgwal+8,+Amsterdam/Bordello+Aperitivo,+Zeedijk,+Amsterdam/@52.365,4.91,14z/data=!3m1!4b1!4m2!4m1!3e2" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+  Open in Google Maps
+</a>
 
 </div>
 
-<div class="footer">Vijgenboom-wandeling &middot; 62 bomen gecatalogiseerd door Dylan Heneck</div>
+<div class="footer">62 vijgenbomen in Amsterdam gecatalogiseerd door Dylan Heneck</div>
 
 <script>
 function showRoute(route) {
